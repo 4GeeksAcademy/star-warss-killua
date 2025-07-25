@@ -1,3 +1,6 @@
+import React, { createContext, useState } from "react";
+
+
 export const initialStore=()=>{
   return{
     message: null,
@@ -30,3 +33,28 @@ export default function storeReducer(store, action = {}) {
       throw Error('Unknown action.');
   }    
 }
+
+
+
+
+export const Context = createContext();
+
+export const ContextProvider = ({ children }) => {
+    const [favorites, setFavorites] = useState([]);
+
+    const addFavorite = (item) => {
+        if (!favorites.includes(item)) {
+            setFavorites([...favorites, item]);
+        }
+    };
+
+    const removeFavorite = (item) => {
+        setFavorites(favorites.filter(fav => fav !== item));
+    };
+
+    return (
+        <Context.Provider value={{ favorites, addFavorite, removeFavorite }}>
+            {children}
+        </Context.Provider>
+    );
+};
